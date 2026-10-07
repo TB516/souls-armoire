@@ -59,7 +59,7 @@ export const storageLayer = (config: StorageConfig) =>
       );
 
       return ObjectStorage.of({
-        put: (key, object) =>
+        put: Effect.fn("ObjectStorage.put")((key: string, object: StoredObject) =>
           Effect.tryPromise({
             try: async (signal) => {
               await client.send(
@@ -74,7 +74,8 @@ export const storageLayer = (config: StorageConfig) =>
             },
             catch: (cause) => new StorageError({ operation: "put", key, cause }),
           }),
-        getUrl: (key) =>
+        ),
+        getUrl: Effect.fn("ObjectStorage.getUrl")((key: string) =>
           Effect.tryPromise({
             // Signing is local and has no abort API. Effect can interrupt the wait,
             // but cannot stop the underlying signing work once it has started.
@@ -89,7 +90,8 @@ export const storageLayer = (config: StorageConfig) =>
               ),
             catch: (cause) => new StorageError({ operation: "getUrl", key, cause }),
           }),
-        delete: (key) =>
+        ),
+        delete: Effect.fn("ObjectStorage.delete")((key: string) =>
           Effect.tryPromise({
             try: async (signal) => {
               await client.send(
@@ -102,6 +104,7 @@ export const storageLayer = (config: StorageConfig) =>
             },
             catch: (cause) => new StorageError({ operation: "delete", key, cause }),
           }),
+        ),
       });
     }),
   );
