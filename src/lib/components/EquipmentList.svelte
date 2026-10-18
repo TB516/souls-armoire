@@ -1,10 +1,12 @@
 <script lang="ts">
+  import type { Effect } from "effect";
   import { equipmentIconPath } from "#lib/equipment.ts";
   import type { GameId } from "#lib/games.ts";
-  import type { getOutfit } from "#lib/remote/outfits.remote.ts";
+  import type { getOutfit } from "#lib/server/outfits/get/index.ts";
   import { equipmentFields } from "./equipment.ts";
 
-  type EquipmentPiece = Awaited<ReturnType<typeof getOutfit>>["equipmentPieces"][number];
+  type Outfit = NonNullable<Effect.Success<ReturnType<typeof getOutfit>>>;
+  type EquipmentPiece = Outfit["equipmentPieces"][number];
 
   let { gameId, equipmentPieces }: { gameId: GameId; equipmentPieces: EquipmentPiece[] } = $props();
 

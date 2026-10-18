@@ -49,6 +49,7 @@ Server operations live under their domain, such as `outfits/list` or
 operation in `index.ts`. Outfit operations define their caches in `cache.ts`.
 Remote functions validate inputs and run those operations through `serverRuntime`.
 The collection's server load validates URL filters and calls the operations directly.
+Outfit details use a server load that validates the outfit ID and calls the get operation.
 
 The UI uses Tailwind through Vite. Shared colors, typography, and page spacing
 live in `src/app.css`; reusable components live in `src/lib/components`. Component

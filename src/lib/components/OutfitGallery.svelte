@@ -1,9 +1,11 @@
 <script lang="ts">
   import { Dialog } from "bits-ui";
-  import type { getOutfit } from "#lib/remote/outfits.remote.ts";
+  import type { Effect } from "effect";
+  import type { getOutfit } from "#lib/server/outfits/get/index.ts";
   import OutfitImage from "./OutfitImage.svelte";
 
-  type OutfitImages = Awaited<ReturnType<typeof getOutfit>>["images"];
+  type Outfit = NonNullable<Effect.Success<ReturnType<typeof getOutfit>>>;
+  type OutfitImages = Outfit["images"];
 
   let { title, images }: { title: string; images: OutfitImages } = $props();
 

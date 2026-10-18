@@ -3,12 +3,11 @@
   import OutfitGallery from "#lib/components/OutfitGallery.svelte";
   import { page } from "$app/state";
   import { games } from "#lib/games.ts";
-  import { getOutfit } from "#lib/remote/outfits.remote.ts";
   import type { PageProps } from "./$types";
 
-  let { params }: PageProps = $props();
+  let { params, data }: PageProps = $props();
 
-  const outfit = $derived(await getOutfit({ gameId: params.gameId, outfitId: params.outfitId }));
+  const outfit = $derived(data.outfit);
 
   const dateFormat = new Intl.DateTimeFormat("en", {
     day: "numeric",
