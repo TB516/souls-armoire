@@ -1,4 +1,4 @@
-FROM node:24.19.0-bookworm
+FROM node:24
 
 RUN npm install --global pnpm@11.23.0
 ENV pnpm_config_store_dir=/home/node/.local/share/pnpm/store
