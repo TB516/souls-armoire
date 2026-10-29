@@ -1,0 +1,13 @@
+{
+  "format_on_save": "on",
+  "prettier": { "allowed": false },
+  "formatter": [{ "code_action": "source.fixAll.oxc" }, { "language_server": { "name": "oxfmt" } }],
+  "languages": {
+    "TypeScript": {
+      "language_servers": ["vtsls", "!typescript-language-server", "!typescript-ls", "..."]
+    },
+    "CSS": {
+      "language_servers": ["tailwindcss-intellisense-css", "!vscode-css-language-server", "..."]
+    }
+  }
+}

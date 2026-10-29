@@ -1,0 +1,42 @@
+{
+  "name": "souls-armoire",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "alchemy dev --stage dev",
+    "build": "vite build",
+    "prepare": "svelte-kit sync",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "lint": "oxlint",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check ."
+  },
+  "dependencies": {
+    "@effect/sql-pg": "4.0.7",
+    "@yielded/auth": "0.1.0-beta.43",
+    "drizzle-orm": "1.0.0-rc.5",
+    "effect": "4.0.7",
+    "pg": "8.23.1"
+  },
+  "devDependencies": {
+    "@alchemy.run/cloudflare": "2.0.0-beta.84",
+    "@alchemy.run/docker": "2.0.0-beta.84",
+    "@effect/language-service": "0.87.5",
+    "@effect/platform-node": "4.0.7",
+    "@sveltejs/adapter-node": "6.0.0",
+    "@sveltejs/kit": "3.1.0",
+    "@sveltejs/vite-plugin-svelte": "7.3.1",
+    "@types/node": "24.19.2",
+    "@types/pg": "8.23.1",
+    "alchemy": "2.0.0-beta.84",
+    "drizzle-kit": "1.0.0-rc.5",
+    "oxfmt": "0.74.0",
+    "oxlint": "1.89.0",
+    "svelte": "5.57.2",
+    "svelte-check": "4.7.7",
+    "typescript": "6.0.3",
+    "typescript-svelte-plugin": "0.3.52",
+    "vite": "8.3.5"
+  }
+}
