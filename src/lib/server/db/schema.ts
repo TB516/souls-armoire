@@ -10,6 +10,7 @@ export {
   outfit,
   outfitEquipment,
   outfitImage,
+  outfitPositionSlot,
   outfitEquipmentPosition,
   outfitImageRole,
 } from "./schema/outfit.ts";

@@ -20,12 +20,11 @@
   <legend class="mb-5 font-semibold">Equipment</legend>
   <div class="grid gap-4">
     {#each equipmentFields as { position, label } (position)}
-      {@const slot = position.endsWith("-hand") ? "armament" : position}
       <EquipmentPicker
         {gameId}
         {position}
         {label}
-        equipment={equipment.filter((piece) => piece.slot === slot)}
+        equipment={equipment.filter((piece) => piece.positions.includes(position))}
         value={selected[position] ?? ""}
       />
     {/each}

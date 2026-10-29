@@ -13,12 +13,15 @@ import {
 
 const galleryPageSize = 18;
 
+/** Gallery orders by publication date. */
+export const outfitSortOrders = ["newest", "oldest"] as const;
+
 /** Filters and pagination for a game's outfit collection. */
 export type ListOutfitsInput = {
   readonly gameId: GameId;
   readonly page: number;
   readonly search: string;
-  readonly sort: "newest" | "oldest";
+  readonly sort: (typeof outfitSortOrders)[number];
   readonly equipment: Partial<Record<OutfitEquipment["position"], OutfitEquipment["equipmentId"]>>;
 };
 

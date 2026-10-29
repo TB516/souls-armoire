@@ -1,7 +1,8 @@
 import { error } from "@sveltejs/kit";
 import { Option, Schema } from "effect";
+import { outfitTitleMaxLength } from "#lib/outfits.ts";
 import { outfitEquipmentPosition, type OutfitEquipment } from "#lib/server/db/schema/outfit.ts";
-import type { ListOutfitsInput } from "#lib/server/outfits/list/db.ts";
+import { outfitSortOrders, type ListOutfitsInput } from "#lib/server/outfits/list/db.ts";
 import { listOutfits } from "#lib/server/outfits/list/index.ts";
 import { serverRuntime } from "#lib/server/runtime.ts";
 import type { PageServerLoad } from "./$types";
@@ -12,8 +13,9 @@ const equipmentId = Schema.optionalKey(
 
 const collectionFiltersSchema = Schema.Struct({
   page: Schema.Int.check(Schema.isBetween({ minimum: 1, maximum: 10_000 })),
-  search: Schema.String.check(Schema.isMaxLength(100)),
-  sort: Schema.Literals(["newest", "oldest"]),
+  // Searches match titles, so they share the title limit.
+  search: Schema.String.check(Schema.isMaxLength(outfitTitleMaxLength)),
+  sort: Schema.Literals(outfitSortOrders),
   equipment: Schema.Struct({
     head: equipmentId,
     chest: equipmentId,

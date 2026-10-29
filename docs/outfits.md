@@ -10,9 +10,9 @@ outfits, with no drafts, revisions, or editing.
 
 An outfit can have one catalog item in each of six positions: head, chest, arms,
 legs, left hand, and right hand. All positions are optional. Armor must match its
-position; either hand accepts an armament. Foreign keys and a check constraint
-enforce the game's catalog and these slot rules. The schema does not model
-two-handing or other wielding details.
+position; either hand accepts an armament. The `outfit_position_slot` table lists
+the slot each position accepts, and foreign keys enforce the game's catalog and
+these rules. The schema does not model two-handing or other wielding details.
 
 ## Images
 

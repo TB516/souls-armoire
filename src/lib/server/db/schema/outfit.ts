@@ -1,4 +1,4 @@
-import { and, eq, ne, or, sql } from "drizzle-orm";
+import { ne, sql } from "drizzle-orm";
 import {
   check,
   foreignKey,
@@ -14,6 +14,11 @@ import {
 } from "drizzle-orm/pg-core";
 import { user } from "./auth.ts";
 import { armorSlots } from "#lib/equipment.ts";
+import {
+  outfitDescriptionMaxLength,
+  outfitImageRoles,
+  outfitTitleMaxLength,
+} from "#lib/outfits.ts";
 import { equipment, equipmentSlot, game } from "./equipment.ts";
 
 const handPositions = ["left-hand", "right-hand"] as const;
@@ -24,7 +29,19 @@ export const outfitEquipmentPosition = pgEnum("outfit_equipment_position", [
   ...handPositions,
 ]);
 
-const outfitImageRoles = ["portrait-1", "portrait-2", "landscape"] as const;
+/**
+ * The catalog slot each outfit position accepts. Armor fits its own position and
+ * armaments fit either hand. A migration seeds the rows, so this table is the only
+ * definition of which items can go where.
+ */
+export const outfitPositionSlot = pgTable(
+  "outfit_position_slot",
+  {
+    position: outfitEquipmentPosition("position").primaryKey(),
+    slot: equipmentSlot("slot").notNull(),
+  },
+  (table) => [unique("outfit_position_slot_position_slot_unique").on(table.position, table.slot)],
+);
 
 export const outfitImageRole = pgEnum("outfit_image_role", outfitImageRoles);
 
@@ -39,8 +56,8 @@ export const outfit = pgTable(
     authorId: text("author_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
-    title: varchar("title", { length: 100 }).notNull(),
-    description: varchar("description", { length: 2000 }).notNull(),
+    title: varchar("title", { length: outfitTitleMaxLength }).notNull(),
+    description: varchar("description", { length: outfitDescriptionMaxLength }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [
@@ -74,16 +91,12 @@ export const outfitEquipment = pgTable(
       columns: [table.gameId, table.equipmentId, table.equipmentSlot],
       foreignColumns: [equipment.gameId, equipment.id, equipment.slot],
     }).onDelete("restrict"),
+    foreignKey({
+      name: "outfit_equipment_position_slot_fkey",
+      columns: [table.position, table.equipmentSlot],
+      foreignColumns: [outfitPositionSlot.position, outfitPositionSlot.slot],
+    }).onDelete("restrict"),
     index("outfit_equipment_catalog_idx").on(table.gameId, table.equipmentId, table.equipmentSlot),
-    check(
-      "outfit_equipment_position_slot_valid",
-      or(
-        ...armorSlots.map((slot) => and(eq(table.position, slot), eq(table.equipmentSlot, slot))),
-        ...handPositions.map((position) =>
-          and(eq(table.position, position), eq(table.equipmentSlot, "armament")),
-        ),
-      )!,
-    ),
   ],
 );
 

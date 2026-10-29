@@ -5,11 +5,17 @@
   import { games } from "#lib/games.ts";
   import { equipmentFields } from "#lib/components/equipment.ts";
   import { listEquipment } from "#lib/remote/equipment.remote.ts";
+  import { outfitTitleMaxLength } from "#lib/outfits.ts";
+  import type { ListOutfitsInput } from "#lib/server/outfits/list/db.ts";
   import type { PageProps } from "./$types";
 
   let { params, data }: PageProps = $props();
 
   const game = $derived(games[params.gameId]);
+  const sortLabels = {
+    newest: "Newest first",
+    oldest: "Oldest first",
+  } satisfies Record<ListOutfitsInput["sort"], string>;
   let filtersOpen = $state(false);
   let filterToggle = $state<HTMLButtonElement>();
 
@@ -91,15 +97,16 @@
                   type="search"
                   name="search"
                   placeholder="Search outfit titles"
-                  maxlength="100"
+                  maxlength={outfitTitleMaxLength}
                   value={filters.search}
                 />
               </label>
               <label class="grid gap-2 text-sm text-muted" for="outfit-sort">
                 Sort
                 <select class="form-field" id="outfit-sort" name="sort" value={filters.sort}>
-                  <option value="newest">Newest first</option>
-                  <option value="oldest">Oldest first</option>
+                  {#each Object.entries(sortLabels) as [sort, label] (sort)}
+                    <option value={sort}>{label}</option>
+                  {/each}
                 </select>
               </label>
             </div>

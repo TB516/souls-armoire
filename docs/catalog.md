@@ -39,9 +39,11 @@ the schema and generating a migration. Changing a name is an ordinary data updat
 
 The unique `(game_id, id, slot)` key lets `outfit_equipment` reference an item
 with its catalog slot. A composite foreign key ties each selection to the outfit's
-game, and the primary key limits each position to one item. A check constraint
-maps armor positions to matching armor slots and both hand positions to
-`armament`.
+game, and the primary key limits each position to one item. Another foreign key
+checks each selection's position and slot against `outfit_position_slot`. Its rows,
+seeded by migration, map armor positions to matching armor slots and both hand
+positions to `armament`. The catalog query joins this table, so equipment pickers
+receive the positions each item fits and do not repeat the rule.
 
 ## Sources and attribution
 
