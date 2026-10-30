@@ -1,0 +1,59 @@
+# Local development services. Credentials here are for local use only.
+name: souls-armoire
+
+services:
+  db:
+    image: postgres:18-alpine
+    container_name: souls-armoire-db
+    environment:
+      POSTGRES_USER: armoire
+      POSTGRES_PASSWORD: armoire
+      POSTGRES_DB: armoire
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "armoire", "-d", "armoire"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  storage:
+    image: rustfs/rustfs:1.0.0
+    container_name: souls-armoire-storage
+    environment:
+      RUSTFS_ACCESS_KEY: armoire-dev
+      RUSTFS_SECRET_KEY: armoire-local-development-only
+      RUSTFS_CONSOLE_ENABLE: "true"
+    ports:
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
+    volumes:
+      - storage-data:/data
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://localhost:9000/health"]
+      interval: 2s
+      timeout: 5s
+      start_period: 10s
+      retries: 30
+
+  # One-shot bucket setup, run with `docker compose run`. It sits behind a profile
+  # because `up --wait` treats an exited container as a failure.
+  storage-init:
+    image: rustfs/rc:v0.1.36
+    profiles: [init]
+    depends_on:
+      storage:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - |
+        rc alias set local http://storage:9000 armoire-dev armoire-local-development-only --region us-east-1 --bucket-lookup path
+        rc bucket create local/souls-armoire-objects --ignore-existing
+
+volumes:
+  db-data:
+    name: souls-armoire-db-data
+  storage-data:
+    name: souls-armoire-storage-data

@@ -1,0 +1,5 @@
+minimumReleaseAgeExclude:
+  - "@yielded/auth@0.1.0-beta.47"
+  - "@yielded/jose@0.1.0-beta.47"
+  - "@yielded/oauth@0.1.0-beta.47"
+pmOnFail: ignore
