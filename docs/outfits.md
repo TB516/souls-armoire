@@ -3,8 +3,8 @@
 The schema stores outfits across `outfit`, `outfit_equipment`, and `outfit_image`.
 Each outfit belongs to one game and one Better Auth user. Titles are required and
 limited to 100 characters; descriptions are required and limited to 2,000.
-There is no update timestamp. The planned submission flow will publish immutable
-outfits, with no drafts, revisions, or editing.
+There is no update timestamp. Submission publishes immutable outfits, with no drafts,
+revisions, or editing.
 
 ## Equipment
 
@@ -18,13 +18,30 @@ two-handing or other wielding details.
 
 An outfit can have up to two portraits and one landscape image. The database
 stores each image's role and unique object-storage key, not its bytes, dimensions,
-or file size. RustFS supplies S3-compatible storage in development. Uploads and
-image validation are not implemented yet; the planned upload flow will accept
-WebP and enforce fixed dimensions and file-size limits.
+or file size. RustFS supplies S3-compatible storage in development.
 
-Publishing will require `portrait-1` as the thumbnail. The database limits image
-roles but cannot require that an outfit has an image, so the publishing service
-must enforce this minimum.
+Portraits are 800 × 1200 pixels and the landscape image is 1200 × 800. Each stored
+image is a WebP file of at most 2 MB, and `src/lib/outfit-submission.ts` defines these
+limits for the browser and server. Publishing requires `portrait-1` as the thumbnail.
+The database limits image roles but cannot require that an outfit has an image, so
+the publishing operation enforces this minimum.
+
+## Publishing
+
+Signed-in users submit outfits at `/<game>/submit`. The browser accepts any image it
+can decode, up to 20 MB, and crops it at the fixed aspect ratio. On publishing, it
+scales each crop to the role's dimensions and converts it to WebP. Original files are
+never uploaded. Browsers that cannot encode WebP show an error instead of publishing.
+
+The server checks the session, then the submitted fields, WebP signatures, dimensions,
+sizes, and equipment. Equipment must exist in the game's catalog and fit its position.
+Each account can publish 10 outfits in any rolling 24 hours, counted from its outfit
+rows. The insert transaction locks the author's user row so concurrent submissions
+cannot exceed the limit. Deleting outfits will lower this count once deletion exists.
+
+Images are stored under `outfits/<outfit id>/<role>.webp` before the database insert,
+so a committed outfit always has its images. If an upload or the insert fails, that
+attempt's objects are deleted. A failed cleanup is logged and leaves orphaned objects.
 
 Deleting a user cascades to their outfit, equipment-selection, and image rows.
 The database cannot delete the corresponding objects from storage; account

@@ -5,6 +5,7 @@ able to share screenshots, list their armor and weapons, and browse other outfit
 Support for other Souls games is planned.
 
 The project is in early development. You can browse outfits and view their equipment.
-Outfit submission is not available yet.
+After signing in with Discord, you can submit your own outfit with a title, description,
+equipment, and up to three screenshots. Published outfits cannot be edited.
 
 To work on the project or run it locally, see the [development guide](docs/development.md).

@@ -29,9 +29,15 @@ importers:
       effect:
         specifier: 4.0.0
         version: 4.0.0
+      image-size:
+        specifier: 2.0.4
+        version: 2.0.4
       pg:
         specifier: 8.23.0
         version: 8.23.0
+      svelte-easy-crop:
+        specifier: 5.0.1
+        version: 5.0.1(svelte@5.57.1)
     devDependencies:
       '@effect/language-service':
         specifier: 0.87.2
@@ -1344,6 +1350,11 @@ packages:
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
+  image-size@2.0.4:
+    resolution: {integrity: sha512-QRUkFFsRV/6fuESxb9Vkq+a0LkSrgKXuc2NEqfikiXxxN/G3tjWt5EVUlMaImRBZRZK/jRBEbYvpPYZL8t08Zw==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   inline-style-parser@0.2.7:
     resolution: {integrity: sha512-Nb2ctOyNR8DqQoR0OwRG95uNWIC0C1lCgf5Naz5H6Ji72KZ8OcFZLz2P5sNgwlyoJ8Yif11oMuYs5pBQa86csA==}
 
@@ -1698,6 +1709,11 @@ packages:
     peerDependencies:
       svelte: ^4.0.0 || ^5.0.0-next.0
       typescript: ^5.0.0 || ^6.0.0
+
+  svelte-easy-crop@5.0.1:
+    resolution: {integrity: sha512-Dq2rgmPsSEo+K8k49TFGXZAJwJa537AR6hW1RqKEdYj7QKlc4Ya7l4VlSYWlOV8/uAiQ10VyGRdSVAUcZiMwjg==}
+    peerDependencies:
+      svelte: ^5.0.0
 
   svelte-toolbelt@0.10.6:
     resolution: {integrity: sha512-YWuX+RE+CnWYx09yseAe4ZVMM7e7GRFZM6OYWpBKOb++s+SQ8RBIMMe+Bs/CznBMc0QPLjr+vDBxTAkozXsFXQ==}
@@ -2743,6 +2759,8 @@ snapshots:
 
   graceful-fs@4.2.11: {}
 
+  image-size@2.0.4: {}
+
   inline-style-parser@0.2.7: {}
 
   is-reference@3.0.3:
@@ -3055,6 +3073,10 @@ snapshots:
       typescript: 6.0.3
     transitivePeerDependencies:
       - picomatch
+
+  svelte-easy-crop@5.0.1(svelte@5.57.1):
+    dependencies:
+      svelte: 5.57.1
 
   svelte-toolbelt@0.10.6(@sveltejs/kit@3.0.0(@sveltejs/vite-plugin-svelte@7.3.1(svelte@5.57.1)(vite@8.3.1(@types/node@24.13.6)(jiti@2.7.0)))(svelte@5.57.1)(typescript@6.0.3)(vite@8.3.1(@types/node@24.13.6)(jiti@2.7.0)))(svelte@5.57.1):
     dependencies:

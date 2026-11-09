@@ -64,17 +64,20 @@
   >
     <div class="mb-8 flex flex-wrap items-center justify-between gap-5">
       <h1 class="text-page-title font-semibold text-accent-light">{game.name} outfits</h1>
-      <button
-        bind:this={filterToggle}
-        class="flex form-field w-auto items-center justify-between gap-3 lg:hidden"
-        type="button"
-        aria-expanded={filtersOpen}
-        aria-controls="collection-filters"
-        onclick={() => (filtersOpen = !filtersOpen)}
-      >
-        Filters{activeFilterCount ? ` (${activeFilterCount})` : ""}
-        <span aria-hidden="true">{filtersOpen ? "−" : "+"}</span>
-      </button>
+      <div class="flex flex-wrap items-center gap-3">
+        <button
+          bind:this={filterToggle}
+          class="flex form-field w-auto items-center justify-between gap-3 lg:hidden"
+          type="button"
+          aria-expanded={filtersOpen}
+          aria-controls="collection-filters"
+          onclick={() => (filtersOpen = !filtersOpen)}
+        >
+          Filters{activeFilterCount ? ` (${activeFilterCount})` : ""}
+          <span aria-hidden="true">{filtersOpen ? "−" : "+"}</span>
+        </button>
+        <a class="action-button" href={`/${params.gameId}/submit`}>Submit an outfit</a>
+      </div>
     </div>
 
     <div class="grid items-start gap-6 lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-8">

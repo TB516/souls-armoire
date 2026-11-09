@@ -11,12 +11,17 @@
     label,
     equipment,
     value = "",
+    name = position,
+    placeholder = "Any",
   }: {
     gameId: GameId;
     position: OutfitEquipment["position"];
     label: string;
     equipment: Awaited<ReturnType<typeof listEquipment>>;
     value?: string;
+    /** Form field name; defaults to the position used by collection filters. */
+    name?: string;
+    placeholder?: string;
   } = $props();
 
   const selected = $derived(equipment.find((piece) => piece.id === value));
@@ -41,7 +46,7 @@
   bind:value
   bind:open
   {items}
-  name={position}
+  {name}
   allowDeselect={false}
   inputValue={selected?.name ?? ""}
   onOpenChange={(isOpen) => (search = isOpen ? (selected?.name ?? "") : "")}
@@ -67,7 +72,7 @@
         id={`${position}-search`}
         autocomplete="off"
         spellcheck="false"
-        placeholder="Any"
+        {placeholder}
         onfocus={openPicker}
         onclick={openPicker}
         oninput={(event) => {
@@ -89,7 +94,7 @@
         <button
           class="shrink-0 px-1 text-muted hover:text-foreground"
           type="button"
-          aria-label={`Clear ${label.toLowerCase()} filter`}
+          aria-label={`Clear ${label.toLowerCase()}`}
           onclick={() => {
             value = "";
             search = "";

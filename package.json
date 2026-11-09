@@ -29,7 +29,9 @@
     "bits-ui": "2.19.3",
     "drizzle-orm": "1.0.0-rc.5-5935859",
     "effect": "4.0.0",
-    "pg": "8.23.0"
+    "image-size": "2.0.4",
+    "pg": "8.23.0",
+    "svelte-easy-crop": "5.0.1"
   },
   "devDependencies": {
     "@effect/language-service": "0.87.2",

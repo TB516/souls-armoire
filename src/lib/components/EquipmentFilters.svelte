@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { ComponentProps } from "svelte";
+  import { equipmentSlotForPosition } from "#lib/equipment.ts";
   import type { GameId } from "#lib/games.ts";
   import type { ListOutfitsInput } from "#lib/server/outfits/list/db.ts";
   import { equipmentFields } from "./equipment.ts";
@@ -20,7 +21,7 @@
   <legend class="mb-5 font-semibold">Equipment</legend>
   <div class="grid gap-4">
     {#each equipmentFields as { position, label } (position)}
-      {@const slot = position.endsWith("-hand") ? "armament" : position}
+      {@const slot = equipmentSlotForPosition(position)}
       <EquipmentPicker
         {gameId}
         {position}

@@ -50,6 +50,8 @@ operation in `index.ts`. Outfit operations define their caches in `cache.ts`.
 Remote functions validate inputs and run those operations through `serverRuntime`.
 The collection's server load validates URL filters and calls the operations directly.
 Outfit details use a server load that validates the outfit ID and calls the get operation.
+Submission uses the `publishOutfit` remote form, which validates the request and calls
+the `outfits/publish` operation. See [outfits](outfits.md#publishing) for its rules.
 
 The UI uses Tailwind through Vite. Shared colors, typography, and page spacing
 live in `src/app.css`; reusable components live in `src/lib/components`. Component
@@ -95,8 +97,9 @@ uploads overwrite an existing key, and deleting a missing key succeeds.
 `serverRuntime` supplies this storage service to the outfit queries. Successful
 list pages stay cached for 30 seconds and existing outfit details for five minutes;
 missing outfits and database failures are retried. Each request signs fresh image
-URLs. The cache is in memory per server process. Uploads and image validation are
-still to be built.
+URLs. The cache is in memory per server process. Publishing an outfit clears that
+process's list cache. New outfits are never in the details cache, since misses are
+not retained.
 
 `S3_ENDPOINT` must be reachable by both the server and browser. Do not rewrite
 signed URLs, since the hostname is part of the signature.
@@ -118,6 +121,10 @@ them:
 | `BETTER_AUTH_SECRET`    | Authentication signing secret.                                 |
 | `DISCORD_CLIENT_ID`     | Discord OAuth application ID.                                  |
 | `DISCORD_CLIENT_SECRET` | Discord OAuth application secret.                              |
+
+Image uploads pass through the server, and the Node adapter rejects request bodies
+over 512 KB by default. Production deployments must also set `BODY_SIZE_LIMIT=7M`
+so a submission with three 2 MB images fits. The development server has no limit.
 
 ## Development data
 
